@@ -20,15 +20,14 @@ void show_info(struct utmp *record);
 void show_host(char *host_name);
 
 int main() {
-    struct utmp current_record;
-    int record_size = sizeof(current_record);
-
     int utmpfd = open(UTMP_FILE, O_RDONLY);
     if (utmpfd == -1) {
         perror(UTMP_FILE);
         exit(1);
     }
 
+    struct utmp current_record;
+    int record_size = sizeof(current_record);
     while (read(utmpfd, &current_record, record_size) == record_size) {
         show_info(&current_record);
     }
@@ -41,9 +40,7 @@ int main() {
  * Prints the host name if it is not empty
  */
 void show_host(char *host_name) {
-    if (host_name[0] == '\0') {
-        return;
-    }
+    if (host_name[0] == '\0') return;
 
     printf("(%s)", host_name);
 }
@@ -62,9 +59,7 @@ void show_time(long time) {
  * Prints one record if that record belongs to a user process
  */
 void show_info(struct utmp *record) {
-    if (record->ut_type != USER_PROCESS) {
-        return;
-    }
+    if (record->ut_type != USER_PROCESS) return;
 
     printf("%-8.8s", record->ut_name); // the logname
     printf(" ");
